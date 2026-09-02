@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kamat Trading Hub | Trading Algorithms, Gold & Forex</title>
+<meta name="description" content="Kamat Trading Hub — Trading content, XAUUSD algorithms, automated trading systems, market insights and useful trading resources." />
+
+<!-- Open Graph -->
+<meta property="og:title" content="Kamat Trading Hub | Trading Algorithms, Gold & Forex" />
+<meta property="og:description" content="Trading content, XAUUSD algorithms, automated trading systems, market insights and useful trading resources — all in one place." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://kamattradinghub.com/" />
+<meta property="og:image" content="assets/images/og-cover.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Kamat Trading Hub" />
+<meta name="twitter:description" content="Trading content, XAUUSD algorithms, automated trading systems and market insights — all in one place." />
+<meta name="twitter:image" content="assets/images/og-cover.jpg" />
+
+<link rel="icon" href="assets/images/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+/* ==========================================================================
+   KAMAT TRADING HUB — Design tokens
+   Palette: near-black charcoal surfaces, brass/gold accent (nods to XAUUSD),
+   monospace used only where the content is genuinely data (stats, tickers,
+   config-style labels) — everything else stays in Space Grotesk / Inter.
+   ========================================================================== */
+
+:root {
+  --bg: #0a0b0d;
+  --bg-elevated: #111318;
+  --bg-card: #15171c;
+  --bg-card-hover: #191c22;
+  --border: #24272e;
+  --border-strong: #363a43;
+
+  --text: #edeef1;
+  --text-muted: #979bA6;
+  --text-faint: #5d616b;
+
+  --accent: #c1904e;
+  --accent-strong: #dcab6c;
+  --accent-dim: rgba(193, 144, 78, 0.1);
+  --accent-line: rgba(193, 144, 78, 0.35);
+
+  --danger: #b5584e;
+
+  --font-display: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --container: 1160px;
+  --radius-s: 3px;
+  --radius-m: 6px;
+
+  --nav-h: 72px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.15;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+.section {
+  padding: 96px 0;
+  border-top: 1px solid var(--border);
+}
+
+.section-head {
+  max-width: 620px;
+  margin-bottom: 48px;
+}
+
+.section-kicker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--accent-strong);
+  margin-bottom: 14px;
+}
+
+.section-title {
+  font-size: clamp(26px, 3.4vw, 38px);
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+.section-desc {
+  color: var(--text-muted);
+  font-size: 16px;
+  max-width: 54ch;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Buttons ---------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 22px;
+  border-radius: var(--radius-s);
+  font-size: 14.5px;
+  font-weight: 500;
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: var(--text);
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  border-color: var(--accent-line);
+  color: var(--accent-strong);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #14100a;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: #14100a;
+}
+
+.btn-block {
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-sm {
+  padding: 9px 16px;
+  font-size: 13.5px;
+}
+
+/* Navigation --------------------------------------------------------------*/
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  background: rgba(10, 11, 13, 0.86);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: var(--text);
+}
+
+.nav-brand .mark {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-s);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-strong);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 34px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  font-size: 14.5px;
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+}
+
+.nav-links a:hover {
+  color: var(--text);
+}
+
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-toggle {
+  display: none;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-s);
+  background: transparent;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-toggle span,
+.nav-toggle span::before,
+.nav-toggle span::after {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 1px;
+  background: var(--text);
+  position: relative;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-toggle span::before {
+  position: absolute;
+  top: -5px;
+}
+
+.nav-toggle span::after {
+  position: absolute;
+  top: 5px;
+}
+
+/* Ticker strip --------------------------------------------------------- */
+
+.ticker {
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ticker-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 40px;
+  padding: 10px 0;
+  animation: ticker-scroll 32s linear infinite;
+}
+
+.ticker-item {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-muted);
+  display: inline-flex;
+  gap: 8px;
+}
+
+.ticker-item .sym {
+  color: var(--text);
+}
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Hero --------------------------------------------------------------------*/
+
+.hero {
+  padding: 88px 0 96px;
+  position: relative;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  color: var(--accent-strong);
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-size: clamp(38px, 5.4vw, 64px);
+  margin-bottom: 20px;
+}
+
+.hero-lede {
+  font-size: 17.5px;
+  color: var(--text-muted);
+  max-width: 46ch;
+  margin-bottom: 36px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  background: linear-gradient(180deg, var(--bg-card), var(--bg-elevated));
+  padding: 28px;
+}
+
+.hero-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+
+.hero-panel-head .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.hero-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.hero-panel-foot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.hero-stat .label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.hero-stat .value {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--text);
+}
+
+/* Card grid base ------------------------------------------------------- */
+
+.grid {
+  display: grid;
+  gap: 20px;
+}
+
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+
+.card {
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  border-radius: var(--radius-m);
+  padding: 26px;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+
+/* Social links ----------------------------------------------------------- */
+
+.social-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  text-align: left;
+}
+
+.social-card:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-card-hover);
+}
+
+.social-icon {
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-s);
+  border: 1px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-strong);
+}
+
+.social-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.social-body h3 {
+  font-size: 16.5px;
+  margin-bottom: 6px;
+}
+
+.social-body p {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.social-arrow {
+  margin-left: auto;
+  align-self: center;
+  color: var(--text-faint);
+  flex: none;
+}
+
+/* Algorithm cards ---------------------------------------------------------*/
+
+.algo-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.algo-card:hover {
+  border-color: var(--border-strong);
+}
+
+.algo-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  gap: 12px;
+}
+
+.algo-name {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.algo-category {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent-strong);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-s);
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+
+.algo-desc {
+  color: var(--text-muted);
+  font-size: 14.5px;
+  margin-bottom: 22px;
+  flex: 1;
+}
+
+.algo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Video cards ---------------------------------------------------------- */
+
+.video-card {
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+}
+
+.video-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  cursor: pointer;
+}
+
+.video-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.75;
+}
+
+.video-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.video-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-play span {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid rgba(237, 238, 241, 0.5);
+  background: rgba(10, 11, 13, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-play svg {
+  width: 18px;
+  height: 18px;
+  margin-left: 3px;
+  fill: var(--text);
+}
+
+.video-body {
+  padding: 18px 20px 22px;
+}
+
+.video-tag {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--accent-strong);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.video-title {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.video-desc {
+  color: var(--text-muted);
+  font-size: 13.5px;
+}
+
+.section-foot {
+  margin-top: 40px;
+  text-align: center;
+}
+
+/* Broker cards ----------------------------------------------------------- */
+
+.broker-card {
+  text-align: left;
+}
+
+.broker-name {
+  font-size: 17px;
+  margin-bottom: 10px;
+}
+
+.broker-desc {
+  color: var(--text-muted);
+  font-size: 14.5px;
+  margin-bottom: 22px;
+}
+
+/* Trust / stats section ---------------------------------------------------*/
+
+.stats-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  background: var(--bg-card);
+  padding: 6px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.stat-cell {
+  padding: 26px 22px;
+  border-right: 1px solid var(--border);
+}
+
+.stat-cell:last-child {
+  border-right: none;
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  color: var(--text-muted);
+}
+
+.equity-placeholder {
+  margin-top: 20px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-s);
+  padding: 46px 20px;
+  text-align: center;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* Contact section ----------------------------------------------------------*/
+
+.contact-section {
+  background: var(--bg-elevated);
+}
+
+.contact-box {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  background: var(--bg-card);
+  padding: 52px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.contact-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Disclaimer ----------------------------------------------------------- */
+
+.disclaimer {
+  padding: 40px 0;
+  border-top: 1px solid var(--border);
+}
+
+.disclaimer-box {
+  display: flex;
+  gap: 14px;
+  color: var(--text-faint);
+  font-size: 13px;
+  line-height: 1.7;
+  max-width: 900px;
+}
+
+.disclaimer-box .mark {
+  flex: none;
+  font-family: var(--font-mono);
+  color: var(--danger);
+}
+
+/* Footer ------------------------------------------------------------------*/
+
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 44px 0 30px;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 22px;
+}
+
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+
+.footer-tagline {
+  color: var(--text-faint);
+  font-size: 14px;
+}
+
+.footer-social {
+  display: flex;
+  gap: 10px;
+}
+
+.footer-social a {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-s);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.footer-social a:hover {
+  color: var(--accent-strong);
+  border-color: var(--accent-line);
+}
+
+.footer-social svg {
+  width: 17px;
+  height: 17px;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+.footer-bottom a:hover {
+  color: var(--text-muted);
+}
+
+/* Modal ---------------------------------------------------------------- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 7, 8, 0.78);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 64px 20px;
+  z-index: 200;
+  overflow-y: auto;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal {
+  width: 100%;
+  max-width: 640px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-m);
+  padding: 36px;
+}
+
+.modal-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+.modal-close {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-s);
+  background: transparent;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.modal-close:hover {
+  color: var(--text);
+  border-color: var(--accent-line);
+}
+
+.modal-category {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent-strong);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.modal-name {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.modal-section {
+  margin-top: 22px;
+}
+
+.modal-section h4 {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-bottom: 10px;
+}
+
+.modal-section p,
+.modal-section li {
+  color: var(--text-muted);
+  font-size: 14.5px;
+}
+
+.modal-features {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+
+.modal-video {
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: var(--radius-s);
+  overflow: hidden;
+}
+
+.modal-video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.modal-disclaimer {
+  font-size: 12.5px;
+  color: var(--text-faint);
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin-top: 26px;
+}
+
+.modal-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+}
+
+body.modal-locked {
+  overflow: hidden;
+}
+
+/* Responsive ----------------------------------------------------------- */
+
+@media (max-width: 980px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-panel { order: -1; }
+  .contact-box { grid-template-columns: 1fr; padding: 36px; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .stat-cell:nth-child(2) { border-right: none; }
+}
+
+@media (max-width: 720px) {
+  .section { padding: 64px 0; }
+
+  .nav-links,
+  .nav-cta .btn:not(.nav-cta-primary) {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  body.nav-open .nav-links {
+    display: flex;
+    position: absolute;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 24px 18px;
+  }
+
+  body.nav-open .nav-links a {
+    padding: 12px 0;
+    width: 100%;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .grid-4, .grid-3, .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 52px 0 64px;
+  }
+
+  .hero-actions .btn {
+    flex: 1 1 calc(50% - 6px);
+    justify-content: center;
+  }
+
+  .contact-box {
+    padding: 28px;
+  }
+
+  .footer-top {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-cell {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat-cell:last-child {
+    border-bottom: none;
+  }
+
+  .modal {
+    padding: 24px;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============================ NAV ============================ -->
+<header class="nav">
+  <div class="container">
+    <a href="#home" class="nav-brand">
+      <span class="mark">KH</span>
+      Kamat Trading Hub
+    </a>
+
+    <nav>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#algorithms">Algorithms</a></li>
+        <li><a href="#videos">Videos</a></li>
+        <li><a href="#brokers">Brokers</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-cta">
+      <a class="btn btn-primary btn-sm nav-cta-primary" data-link="telegram" href="#">Join Telegram</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Ticker strip -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<main id="home">
+
+  <!-- ============================ HERO ============================ -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="hero-eyebrow">Trading • Algorithms • Education</span>
+        <h1>Kamat Trading Hub</h1>
+        <p class="hero-lede">Trading content, automated trading algorithms, market insights and useful resources — all in one place.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" data-link="telegram" href="#">Join Telegram</a>
+          <a class="btn" data-link="whatsapp" href="#">WhatsApp</a>
+          <a class="btn" data-link="youtube" href="#">Watch on YouTube</a>
+          <a class="btn" data-link="instagram" href="#">Instagram</a>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <div class="hero-panel-head">
+          <span><span class="dot"></span>XAUUSD</span>
+          <span>1D</span>
+        </div>
+        <svg class="hero-chart" viewBox="0 0 460 190" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="40" x2="460" y2="40" stroke="#24272e" stroke-width="1"/>
+          <line x1="0" y1="95" x2="460" y2="95" stroke="#24272e" stroke-width="1"/>
+          <line x1="0" y1="150" x2="460" y2="150" stroke="#24272e" stroke-width="1"/>
+          <g stroke="#3a3f48" stroke-width="1.4">
+            <line x1="20" y1="70" x2="20" y2="120"/><rect x="16" y="80" width="8" height="26" fill="#5d616b"/>
+            <line x1="45" y1="60" x2="45" y2="110"/><rect x="41" y="70" width="8" height="24" fill="#5d616b"/>
+            <line x1="70" y1="80" x2="70" y2="128"/><rect x="66" y="90" width="8" height="24" fill="#b5584e"/>
+            <line x1="95" y1="65" x2="95" y2="112"/><rect x="91" y="72" width="8" height="26" fill="#5d616b"/>
+            <line x1="120" y1="55" x2="120" y2="100"/><rect x="116" y="60" width="8" height="28" fill="#c1904e"/>
+            <line x1="145" y1="45" x2="145" y2="90"/><rect x="141" y="52" width="8" height="26" fill="#c1904e"/>
+            <line x1="170" y1="58" x2="170" y2="102"/><rect x="166" y="66" width="8" height="24" fill="#5d616b"/>
+            <line x1="195" y1="48" x2="195" y2="94"/><rect x="191" y="54" width="8" height="28" fill="#c1904e"/>
+            <line x1="220" y1="60" x2="220" y2="108"/><rect x="216" y="70" width="8" height="26" fill="#b5584e"/>
+            <line x1="245" y1="70" x2="245" y2="118"/><rect x="241" y="80" width="8" height="26" fill="#5d616b"/>
+            <line x1="270" y1="50" x2="270" y2="96"/><rect x="266" y="58" width="8" height="26" fill="#c1904e"/>
+            <line x1="295" y1="38" x2="295" y2="82"/><rect x="291" y="44" width="8" height="26" fill="#c1904e"/>
+            <line x1="320" y1="52" x2="320" y2="98"/><rect x="316" y="60" width="8" height="26" fill="#5d616b"/>
+            <line x1="345" y1="42" x2="345" y2="86"/><rect x="341" y="48" width="8" height="26" fill="#c1904e"/>
+            <line x1="370" y1="30" x2="370" y2="74"/><rect x="366" y="36" width="8" height="26" fill="#c1904e"/>
+            <line x1="395" y1="44" x2="395" y2="88"/><rect x="391" y="52" width="8" height="24" fill="#b5584e"/>
+            <line x1="420" y1="34" x2="420" y2="78"/><rect x="416" y="40" width="8" height="26" fill="#c1904e"/>
+            <line x1="440" y1="24" x2="440" y2="66"/><rect x="436" y="30" width="8" height="24" fill="#c1904e"/>
+          </g>
+        </svg>
+        <div class="hero-panel-foot">
+          <div class="hero-stat">
+            <span class="label">Focus</span>
+            <span class="value">Gold / Forex</span>
+          </div>
+          <div class="hero-stat">
+            <span class="label">Approach</span>
+            <span class="value">Systematic</span>
+          </div>
+          <div class="hero-stat">
+            <span class="label">Format</span>
+            <span class="value">Automated</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ SOCIAL LINKS ============================ -->
+  <section class="section" id="social">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-kicker">// channels</span>
+        <h2 class="section-title">Find me everywhere</h2>
+        <p class="section-desc">Community, updates and content — pick the channel that works for you.</p>
+      </div>
+
+      <div class="grid grid-4" id="socialGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============================ ALGORITHMS ============================ -->
+  <section class="section" id="algorithms">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-kicker">// algorithms</span>
+        <h2 class="section-title">My trading algorithms</h2>
+        <p class="section-desc">Explore my automated trading systems, their features, strategy information and demonstration videos.</p>
+      </div>
+
+      <div class="grid grid-3" id="algoGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============================ ALGO VIDEOS ============================ -->
+  <section class="section" id="videos">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-kicker">// algorithm videos</span>
+        <h2 class="section-title">See the algorithms in action</h2>
+        <p class="section-desc">Demos, backtests and walkthroughs, pulled straight from the YouTube channel.</p>
+      </div>
+
+      <div class="grid grid-3" id="algoVideoGrid"></div>
+
+      <div class="section-foot">
+        <a class="btn" data-link="youtube" href="#">View all videos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ BROKERS ============================ -->
+  <section class="section" id="brokers">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-kicker">// brokers</span>
+        <h2 class="section-title">Recommended brokers</h2>
+        <p class="section-desc">Brokers and trading platforms I use and recommend for accessing the markets.</p>
+      </div>
+
+      <div class="grid grid-3" id="brokerGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============================ LATEST YOUTUBE ============================ -->
+  <section class="section" id="latest-youtube">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-kicker">// latest uploads</span>
+        <h2 class="section-title">Latest from YouTube</h2>
+        <p class="section-desc">Recent uploads covering market analysis, algo content and trading education.</p>
+      </div>
+
+      <div class="grid grid-3" id="latestVideoGrid"></div>
+
+      <div class="section-foot">
+        <a class="btn btn-primary" data-link="youtube" href="#">Visit YouTube channel</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ TRUST / PERFORMANCE ============================ -->
+  <section class="section" id="performance">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-kicker">// backtest statistics</span>
+        <h2 class="section-title">Performance data</h2>
+        <p class="section-desc">Real backtesting figures will be published here as each algorithm's track record is finalized. No numbers are shown until they're verified.</p>
+      </div>
+
+      <div class="stats-panel">
+        <div class="stats-row">
+          <div class="stat-cell">
+            <span class="stat-label">Profit Factor</span>
+            <span class="stat-value">Add data</span>
+          </div>
+          <div class="stat-cell">
+            <span class="stat-label">Max Drawdown</span>
+            <span class="stat-value">Add data</span>
+          </div>
+          <div class="stat-cell">
+            <span class="stat-label">Win Rate</span>
+            <span class="stat-value">Add data</span>
+          </div>
+          <div class="stat-cell">
+            <span class="stat-label">Total Trades</span>
+            <span class="stat-value">Add data</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="equity-placeholder">Equity curve / backtest screenshot — add image at assets/screenshots/equity-curve.png</div>
+    </div>
+  </section>
+
+  <!-- ============================ CONTACT ============================ -->
+  <section class="section contact-section" id="contact">
+    <div class="container">
+      <div class="contact-box">
+        <div>
+          <h2 class="section-title">Want to know more?</h2>
+          <p class="section-desc">Have questions about my algorithms, trading content or collaboration? Get in touch directly.</p>
+        </div>
+        <div class="contact-actions">
+          <a class="btn btn-primary btn-block" data-link="whatsapp" href="#">WhatsApp me</a>
+          <a class="btn btn-block" data-link="telegram" href="#">Join Telegram</a>
+          <a class="btn btn-block" data-link="instagram" href="#">Instagram</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ DISCLAIMER ============================ -->
+  <section class="disclaimer">
+    <div class="container">
+      <div class="disclaimer-box">
+        <span class="mark">!</span>
+        <p>Trading involves substantial risk and may not be suitable for every investor. Past performance, backtesting results and hypothetical results do not guarantee future performance. Any information provided on this website is for educational and informational purposes only and should not be considered financial advice. Trade responsibly and only use capital you can afford to lose.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">Kamat Trading Hub</div>
+        <p class="footer-tagline">Trading • Algorithms • Education</p>
+      </div>
+      <div class="footer-social" id="footerSocial"></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Kamat Trading Hub. All rights reserved.</span>
+      <a href="#disclaimer-full">Disclaimer</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================ ALGO DETAILS MODAL ============================ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalName">
+    <div class="modal-top">
+      <div>
+        <span class="modal-category" id="modalCategory"></span>
+        <h3 class="modal-name" id="modalName"></h3>
+      </div>
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    </div>
+
+    <div class="modal-video" id="modalVideoWrap"></div>
+
+    <div class="modal-section">
+      <h4>What it is</h4>
+      <p id="modalWhat"></p>
+    </div>
+
+    <div class="modal-section">
+      <h4>Market &amp; trading style</h4>
+      <p id="modalMarket"></p>
+    </div>
+
+    <div class="modal-section">
+      <h4>Main features</h4>
+      <ul class="modal-features" id="modalFeatures"></ul>
+    </div>
+
+    <div class="modal-section">
+      <h4>Backtesting information</h4>
+      <p id="modalBacktest"></p>
+    </div>
+
+    <p class="modal-disclaimer">Any figures shown above are backtested / historical results only and do not guarantee future performance. Trading involves risk.</p>
+
+    <div class="modal-actions">
+      <a class="btn btn-primary" id="modalContact" href="#">Contact to buy</a>
+      <button class="btn" id="modalCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================================
+   KAMAT TRADING HUB — configuration & data
+   Everything you need to update links, algorithms, videos and brokers
+   lives in this one file. Look for CONFIG, algorithms, algoVideos,
+   latestVideos and brokers below.
+   ========================================================================== */
+
+/* 1. LINKS — change these once, every button on the site updates. */
+const CONFIG = {
+  telegram: "https://t.me/kamattrading",
+  whatsapp: "https://wa.me/919924926124",
+  youtube: "https://youtube.com/@kamattrading?si=iDWQir1cjjcxAWdr",
+  instagram: "https://www.instagram.com/kamat_tradinghub?igsi=dzZsZmFhbmdmdGVv&utm_source=qr",
+
+  brokers: {
+    broker1: "https://vigco.co/la-com-inv/KAMAT5",
+    broker2: "https://sharkexchange.in/referral?code=UTR423",
+    broker3: "https://watch.exchange1.com/register?invitation_code=62905634&lang=en-US",
+  },
+};
+
+/* 2. ALGORITHMS — add a new object to this array to add a new algo card.
+   demoVideo should be a YouTube video ID (the part after watch?v=). */
+const algorithms = [
+  {
+    name: "KamatXAUBOT",
+    category: "XAUUSD Automated Trading",
+    description: "Automated trading system designed for XAUUSD with a structured trading and recovery approach.",
+    what: "KamatXAUBOT is an automated trading system built specifically for XAUUSD, running entries and exits without manual intervention once it is deployed.",
+    market: "XAUUSD (Gold) — designed for structured, rules-based execution rather than discretionary trading.",
+    features: [
+      "Structured entry logic for XAUUSD",
+      "Built-in recovery approach for managing open positions",
+      "Runs unattended once configured on a supported platform",
+      "Adjustable risk settings",
+    ],
+    backtestNote: "Backtesting information for this version is being finalized and will be published here as Backtested / Historical Results, with the disclaimer below attached.",
+    demoVideo: "VIDEO_ID_1",
+    detailsUrl: "#",
+    purchaseUrl: "whatsapp",
+  },
+  {
+    name: "ZiniXAU",
+    category: "XAUUSD Algorithm",
+    description: "Automated XAUUSD trading system with a systematic approach to entries, management and exits.",
+    what: "ZiniXAU is a systematic XAUUSD algorithm covering the full trade lifecycle — entry, in-trade management and exit — under a fixed rule set.",
+    market: "XAUUSD (Gold) — systematic, rules-based execution.",
+    features: [
+      "Systematic entry, management and exit rules",
+      "Consistent logic across market sessions",
+      "Designed for XAUUSD specifically",
+      "Adjustable risk settings",
+    ],
+    backtestNote: "Backtesting information for this version is being finalized and will be published here as Backtested / Historical Results, with the disclaimer below attached.",
+    demoVideo: "VIDEO_ID_2",
+    detailsUrl: "#",
+    purchaseUrl: "whatsapp",
+  },
+];
+
+/* 3. ALGORITHM VIDEOS — shown in the "Algorithm Videos" section. */
+const algoVideos = [
+  {
+    title: "KamatXAUBOT — Full Demo",
+    youtubeId: "VIDEO_ID_1",
+    description: "Complete demonstration of the algorithm.",
+    tag: "Demo",
+  },
+  {
+    title: "XAUUSD Algo Backtest",
+    youtubeId: "VIDEO_ID_2",
+    description: "Backtesting performance and trading statistics.",
+    tag: "Backtest",
+  },
+  {
+    title: "How The Algo Works",
+    youtubeId: "VIDEO_ID_3",
+    description: "Overview of the trading system and its logic.",
+    tag: "Explainer",
+  },
+];
+
+/* 4. LATEST YOUTUBE VIDEOS — shown in "Latest from YouTube". */
+const latestVideos = [
+  {
+    title: "Weekly Gold Outlook",
+    youtubeId: "VIDEO_ID_4",
+    description: "Market structure and levels to watch this week.",
+    tag: "Market Analysis",
+  },
+  {
+    title: "Inside The Trading Algorithm",
+    youtubeId: "VIDEO_ID_5",
+    description: "A closer look at how the automated system executes trades.",
+    tag: "Algo",
+  },
+  {
+    title: "Trading Education: Risk Basics",
+    youtubeId: "VIDEO_ID_6",
+    description: "Core risk concepts every trader should understand first.",
+    tag: "Education",
+  },
+];
+
+/* 5. BROKERS */
+const brokers = [
+  {
+    name: "Vantage",
+    description: "Best platform for Gold.",
+    link: "https://vigco.co/la-com-inv/KAMAT5",
+  },
+  {
+    name: "Shark",
+    description: "Best For CryptoCurrency.",
+    link: "https://sharkexchange.in/referral?code=UTR423",
+  },
+  {
+    name: "Exchange1",
+    description: "Best Fiu Broker.",
+    link: "https://watch.exchange1.com/register?invitation_code=62905634&lang=en-US",
+  },
+];
+
+/* ==========================================================================
+   Icons (inline SVG, no external requests)
+   ========================================================================== */
+
+const ICONS = {
+  telegram: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 4L2.5 11.3c-1 .4-1 1.9.1 2.2l4.4 1.4 1.7 5.3c.3.9 1.4 1.1 2 .4l2.5-2.7 4.6 3.4c.8.6 1.9.1 2.1-.8L22.9 5c.2-1-.9-1.7-1.9-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8.6 14.9L18 7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
+  whatsapp: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 20l1.3-4.1A7.9 7.9 0 1 1 8.6 19L4 20z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 9.6c0 3 2.4 5.4 5.4 5.4.5 0 1-.5.9-1l-.2-1c-.1-.4-.5-.6-.9-.5l-1 .3a4 4 0 0 1-2.9-2.9l.3-1c.1-.4-.1-.8-.5-.9l-1-.2c-.5-.1-1 .4-1 .9v.9z" stroke="currentColor" stroke-width="1.2"/></svg>',
+  youtube: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2.5" y="5.5" width="19" height="13" rx="3" stroke="currentColor" stroke-width="1.4"/><path d="M10.5 9.5l5 2.5-5 2.5v-5z" fill="currentColor"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></svg>',
+};
+
+const socialCopy = {
+  telegram: { name: "Telegram", desc: "Join the community and get updates." },
+  youtube: { name: "YouTube", desc: "Trading videos, market analysis and algo content." },
+  instagram: { name: "Instagram", desc: "Reels, updates and trading content." },
+  whatsapp: { name: "WhatsApp", desc: "Contact me directly." },
+};
+
+/* ==========================================================================
+   Render helpers
+   ========================================================================== */
+
+function el(html) {
+  const t = document.createElement("template");
+  t.innerHTML = html.trim();
+  return t.content.firstElementChild;
+}
+
+function youtubeThumb(id) {
+  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+}
+
+function videoFacade(id, title) {
+  return `
+    <div class="video-frame" data-youtube-id="${id}" role="button" tabindex="0" aria-label="Play ${title}">
+      <img src="${youtubeThumb(id)}" alt="${title} thumbnail" loading="lazy" />
+      <div class="video-play"><span><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></span></div>
+    </div>`;
+}
+
+function playVideo(frame) {
+  const id = frame.dataset.youtubeId;
+  frame.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+}
+
+function renderSocial() {
+  const grid = document.getElementById("socialGrid");
+  Object.keys(socialCopy).forEach((key) => {
+    const copy = socialCopy[key];
+    const card = el(`
+      <a class="card social-card" data-link="${key}" href="#">
+        <span class="social-icon">${ICONS[key]}</span>
+        <span class="social-body">
+          <h3>${copy.name}</h3>
+          <p>${copy.desc}</p>
+        </span>
+        <span class="social-arrow">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>`);
+    grid.appendChild(card);
+  });
+}
+
+function renderAlgorithms() {
+  const grid = document.getElementById("algoGrid");
+  algorithms.forEach((algo, index) => {
+    const card = el(`
+      <div class="card algo-card">
+        <div class="algo-card-top">
+          <div>
+            <h3 class="algo-name">${algo.name}</h3>
+          </div>
+          <span class="algo-category">${algo.category}</span>
+        </div>
+        <p class="algo-desc">${algo.description}</p>
+        <div class="algo-actions">
+          <button class="btn btn-sm" data-watch="${algo.demoVideo}" data-title="${algo.name}">Watch video</button>
+          <button class="btn btn-sm" data-details-index="${index}">View details</button>
+          <a class="btn btn-sm btn-primary" data-link="${algo.purchaseUrl}" href="#">Contact to buy</a>
+        </div>
+      </div>`);
+    grid.appendChild(card);
+  });
+}
+
+function renderVideoGrid(containerId, list) {
+  const grid = document.getElementById(containerId);
+  list.forEach((v) => {
+    const card = el(`
+      <div class="video-card">
+        ${videoFacade(v.youtubeId, v.title)}
+        <div class="video-body">
+          <span class="video-tag">${v.tag}</span>
+          <h3 class="video-title">${v.title}</h3>
+          <p class="video-desc">${v.description}</p>
+        </div>
+      </div>`);
+    grid.appendChild(card);
+  });
+}
+
+function renderBrokers() {
+  const grid = document.getElementById("brokerGrid");
+  brokers.forEach((b) => {
+    const card = el(`
+      <div class="card broker-card">
+        <h3 class="broker-name">${b.name}</h3>
+        <p class="broker-desc">${b.description}</p>
+        <a class="btn btn-primary" href="${CONFIG.brokers[b.link]}" target="_blank" rel="noopener">Open account</a>
+      </div>`);
+    grid.appendChild(card);
+  });
+}
+
+function renderFooterSocial() {
+  const wrap = document.getElementById("footerSocial");
+  Object.keys(ICONS).forEach((key) => {
+    const link = el(`<a data-link="${key}" href="#" aria-label="${socialCopy[key].name}">${ICONS[key]}</a>`);
+    wrap.appendChild(link);
+  });
+}
+
+function renderTicker() {
+  const items = [
+    { sym: "XAUUSD", label: "Gold Spot" },
+    { sym: "EURUSD", label: "Euro / Dollar" },
+    { sym: "GBPUSD", label: "Pound / Dollar" },
+    { sym: "USDJPY", label: "Dollar / Yen" },
+    { sym: "US30", label: "Dow Jones" },
+    { sym: "XAGUSD", label: "Silver Spot" },
+  ];
+  const track = document.getElementById("tickerTrack");
+  const renderSet = () =>
+    items
+      .map((i) => `<span class="ticker-item"><span class="sym">${i.sym}</span>${i.label}</span>`)
+      .join("");
+  track.innerHTML = renderSet() + renderSet();
+}
+
+/* ==========================================================================
+   Link wiring — every [data-link] element resolves against CONFIG
+   ========================================================================== */
+
+function wireLinks() {
+  document.querySelectorAll("[data-link]").forEach((node) => {
+    const key = node.getAttribute("data-link");
+    const url = CONFIG[key];
+    if (url) {
+      node.setAttribute("href", url);
+      node.setAttribute("target", "_blank");
+      node.setAttribute("rel", "noopener");
+    }
+  });
+}
+
+/* ==========================================================================
+   Mobile nav
+   ========================================================================== */
+
+function setupNav() {
+  const toggle = document.getElementById("navToggle");
+  toggle.addEventListener("click", () => {
+    const open = document.body.classList.toggle("nav-open");
+    toggle.setAttribute("aria-expanded", String(open));
+  });
+
+  document.getElementById("navLinks").addEventListener("click", (e) => {
+    if (e.target.tagName === "A") document.body.classList.remove("nav-open");
+  });
+}
+
+/* ==========================================================================
+   Lazy YouTube facades (event delegation)
+   ========================================================================== */
+
+function setupVideoFacades() {
+  document.addEventListener("click", (e) => {
+    const frame = e.target.closest(".video-frame");
+    if (frame) playVideo(frame);
+  });
+  document.addEventListener("keydown", (e) => {
+    if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("video-frame")) {
+      e.preventDefault();
+      playVideo(e.target);
+    }
+  });
+}
+
+/* ==========================================================================
+   Algorithm details modal
+   ========================================================================== */
+
+function setupModal() {
+  const overlay = document.getElementById("modalOverlay");
+  const videoWrap = document.getElementById("modalVideoWrap");
+
+  function open(algo) {
+    document.getElementById("modalCategory").textContent = algo.category;
+    document.getElementById("modalName").textContent = algo.name;
+    document.getElementById("modalWhat").textContent = algo.what;
+    document.getElementById("modalMarket").textContent = algo.market;
+    document.getElementById("modalBacktest").textContent = algo.backtestNote;
+
+    const featuresList = document.getElementById("modalFeatures");
+    featuresList.innerHTML = "";
+    algo.features.forEach((f) => {
+      const li = document.createElement("li");
+      li.textContent = f;
+      featuresList.appendChild(li);
+    });
+
+    videoWrap.innerHTML = videoFacade(algo.demoVideo, algo.name);
+
+    const contactBtn = document.getElementById("modalContact");
+    contactBtn.href = CONFIG[algo.purchaseUrl] || "#";
+    contactBtn.setAttribute("target", "_blank");
+    contactBtn.setAttribute("rel", "noopener");
+
+    overlay.classList.add("open");
+    document.body.classList.add("modal-locked");
+  }
+
+  function close() {
+    overlay.classList.remove("open");
+    document.body.classList.remove("modal-locked");
+    videoWrap.innerHTML = "";
+  }
+
+  document.addEventListener("click", (e) => {
+    const trigger = e.target.closest("[data-details-index]");
+    if (trigger) {
+      const algo = algorithms[Number(trigger.getAttribute("data-details-index"))];
+      open(algo);
+    }
+
+    const watchTrigger = e.target.closest("[data-watch]");
+    if (watchTrigger) {
+      const id = watchTrigger.getAttribute("data-watch");
+      const algo = algorithms.find((a) => a.demoVideo === id) || { name: watchTrigger.dataset.title, category: "", what: "", market: "", features: [], backtestNote: "", demoVideo: id, purchaseUrl: "whatsapp" };
+      open(algo);
+    }
+  });
+
+  document.getElementById("modalClose").addEventListener("click", close);
+  document.getElementById("modalCloseBtn").addEventListener("click", close);
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) close();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && overlay.classList.contains("open")) close();
+  });
+}
+
+/* ==========================================================================
+   Init
+   ========================================================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderTicker();
+  renderSocial();
+  renderAlgorithms();
+  renderVideoGrid("algoVideoGrid", algoVideos);
+  renderVideoGrid("latestVideoGrid", latestVideos);
+  renderBrokers();
+  renderFooterSocial();
+  wireLinks();
+  setupNav();
+  setupVideoFacades();
+  setupModal();
+});
+
+</script>
+</body>
+</html>
